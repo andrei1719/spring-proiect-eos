@@ -12,31 +12,31 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "subject")
+    @Column(name = "subject", nullable = false)
     private String subject;
 
-    @Column(name = "due_date")
+    @Column(name = "due_date", nullable = false)
     private java.sql.Date dueDate;
 
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
 
-    @Column(name = "id_user")
-    //@ManyToOne
-    //@JoinColumn(name = "id_user", nullable = false)
-    private long userID;
+
+    @ManyToOne
+    @JoinColumn(name = "id_user", nullable = false)
+    private User user;
 
     public Task() {
 
     }
 
-    public Task(long id, String subject, Date dueDate, TaskStatus status, long userID) {
+    public Task(long id, String subject, Date dueDate, TaskStatus status, User user) {
         this.id = id;
         this.subject = subject;
         this.dueDate = dueDate;
         this.status = status;
-        this.userID = userID;
+        this.user = user;
     }
 
     public long getId() {
@@ -71,12 +71,12 @@ public class Task {
         this.status = status;
     }
 
-    public long getUserID() {
-        return userID;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserID(long userID) {
-        this.userID = userID;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class Task {
                 ", subject='" + subject + '\'' +
                 ", dueDate=" + dueDate +
                 ", status=" + status +
-                ", userID=" + userID +
+                ", user=" + user +
                 '}';
     }
 }

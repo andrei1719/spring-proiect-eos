@@ -16,16 +16,15 @@ import java.util.Optional;
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
-        @Query("SELECT t FROM Task t WHERE " +
-                "(:assigned IS NULL OR t.userID = :assigned) AND " +
-                "(:subject IS NULL OR t.subject = :subject) AND " +
-                "(:dueDate IS NULL OR t.dueDate = :dueDate) AND " +
-                "(:status IS NULL OR t.status = :status)")
-        List<Task> findByAssignedAndSubjectAndDueDateAndStatus(
-                @Param("assigned") Long assigned,
-                @Param("subject") String subject,
-                @Param("dueDate") Date dueDate,
-                @Param("status") TaskStatus status,
-                Sort sort);
-    }
-
+    @Query("SELECT t FROM Task t WHERE " +
+            "(:assigned IS NULL OR t.user.id = :assigned) AND " +
+            "(:subject IS NULL OR t.subject LIKE %:subject%) AND " +
+            "(:dueDate IS NULL OR t.dueDate >= :dueDate) AND " +
+            "(:status IS NULL OR t.status = :status)")
+    List<Task> findByAssignedAndSubjectAndDueDateAndStatus(
+            @Param("assigned") Long assigned,
+            @Param("subject") String subject,
+            @Param("dueDate") Date dueDate,
+            @Param("status") TaskStatus status,
+            Sort sort);
+}

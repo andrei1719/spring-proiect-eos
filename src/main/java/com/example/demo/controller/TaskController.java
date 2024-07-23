@@ -3,7 +3,9 @@ package com.example.demo.controller;
 import com.example.demo.exceptions.ResourceNotFoundeException;
 import com.example.demo.model.Task;
 import com.example.demo.model.TaskStatus;
+import com.example.demo.model.User;
 import com.example.demo.repository.TaskRepository;
+import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,6 +25,9 @@ public class TaskController {
     @Autowired
     private TaskRepository taskRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
 //    @GetMapping("/tasks")
 //    public List<Task> getAllTasks() {
 //        return taskRepository.findAll();
@@ -30,6 +35,9 @@ public class TaskController {
 
     @PostMapping("/tasks")
     public Task createTask(@RequestBody Task task) {
+        User user = userRepository.findById(task.getUser().getId())
+                .orElseThrow(() -> new ResourceNotFoundeException("User not found with id: " + task.getUser().getId()));
+        task.setUser(user);
         return taskRepository.save(task);
     }
 
@@ -51,10 +59,13 @@ public class TaskController {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundeException("Task does not exist with id :" + id));
 
+        User user = userRepository.findById(taskDetails.getUser().getId())
+                        .orElseThrow(() -> new ResourceNotFoundeException("User not found with id " + id));
+
+        task.setUser(user);
         task.setStatus(taskDetails.getStatus());
         task.setSubject(taskDetails.getSubject());
         task.setDueDate(taskDetails.getDueDate());
-        task.setUserID(taskDetails.getUserID());
 
         Task updatedTask = taskRepository.save(task);
         return ResponseEntity.ok(updatedTask);

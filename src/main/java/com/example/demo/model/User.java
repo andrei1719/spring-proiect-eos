@@ -12,13 +12,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "user_name")
+    @Column(name = "user_name", nullable = false, unique = true)
     private String userName;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "userID")
+    @OneToMany(mappedBy = "user")
     private List<Task> tasksList;
 
     public User() {
