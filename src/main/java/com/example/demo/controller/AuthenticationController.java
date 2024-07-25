@@ -6,6 +6,7 @@ import com.example.demo.model.User;
 import com.example.demo.responses.LoginResponse;
 import com.example.demo.services.AuthenticationService;
 import com.example.demo.services.JwtService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,5 +38,15 @@ public class AuthenticationController {
         LoginResponse loginResponse = new LoginResponse().setToken(jwtToken).setExpiresIn(jwtService.getExpirationTime());
 
         return ResponseEntity.ok(loginResponse);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);
+            jwtService.invalidateToken(token);
+        }
+        return ResponseEntity.ok().build();
     }
 }

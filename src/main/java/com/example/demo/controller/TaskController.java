@@ -28,11 +28,6 @@ public class TaskController {
     @Autowired
     private UserRepository userRepository;
 
-//    @GetMapping("/tasks")
-//    public List<Task> getAllTasks() {
-//        return taskRepository.findAll();
-//    }
-
     @PostMapping("/tasks")
     public Task createTask(@RequestBody Task task) {
         User user = userRepository.findById(task.getUser().getId())
