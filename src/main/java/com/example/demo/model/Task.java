@@ -12,7 +12,7 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "subject", nullable = false)
+    @Column(name = "subject", nullable = false, length = 100)
     private String subject;
 
     @Column(name = "due_date", nullable = false)
@@ -21,7 +21,6 @@ public class Task {
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
-
 
     @ManyToOne
     @JoinColumn(name = "id_user", nullable = false)
